@@ -26,3 +26,5 @@ build/
 *.ntvs*
 *.njsproj
 *.sublime-*
+
+.vercel
