@@ -1,0 +1,28 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+
+# Environment Variables & Secrets
+.env
+.env*.local
+*.env
+*.pem
+*.key
+secrets/
+
+# Dependencies & Build Caches
+node_modules/
+.vercel
+dist/
+build/
+*.log
+
+# Editor & IDE Configs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sublime-*

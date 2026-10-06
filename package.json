@@ -1,0 +1,20 @@
+{
+  "name": "jogo-valeafesu",
+  "version": "1.0.0",
+  "description": "Vale Afesu - Fazenda Web Jogável em HTML5 Canvas, Vanilla CSS e Web Audio API",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8080",
+    "dev": "python -m http.server 8080"
+  },
+  "keywords": [
+    "game",
+    "pixel-art",
+    "canvas",
+    "html5-game",
+    "stardew-valley",
+    "vale-afesu"
+  ],
+  "author": "Gustavo Feriani",
+  "license": "MIT"
+}

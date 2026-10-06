@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vale Afesu - Fazenda Web Jogável</title>
+    <meta name="description" content="Vale Afesu - Protótipo interativo e jogável de fazenda em pixel art, HTML5 Canvas, Vanilla CSS e Web Audio API.">
+    <meta name="author" content="Gustavo Feriani">
+    <meta name="theme-color" content="#4aa3df">
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="Vale Afesu - Fazenda Web Jogável">
+    <meta property="og:description" content="Cultive, colha, cuide de animais e viva a tranquilidade do campo no Vale Afesu!">
+    <meta property="og:type" content="website">
+    <!-- Wheat Emoji Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌾</text></svg>">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="gameContainer">
+        <!-- Main Game Viewport Canvas -->
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- Top Left Action Bar -->
+        <div class="top-bar-controls">
+            <button id="btnMenu" class="stardew-btn" onclick="window.game.openSettingsModal()">
+                ⚙️ Menu / Opções
+            </button>
+            <button id="btnMusic" class="stardew-btn" onclick="window.game.toggleMusic()">
+                🎵 Música: Desligada
+            </button>
+            <button id="btnSleep" class="stardew-btn" onclick="window.game.triggerSleep()">
+                💤 Dormir (Novo Dia)
+            </button>
+            <button id="btnHelp" class="stardew-btn" onclick="window.game.toggleGuideModal()">
+                ❓ Guia
+            </button>
+            <button id="btnHouse" class="stardew-btn" onclick="window.game.openHouseInterior()">
+                🏡 Entrar na Casa
+            </button>
+        </div>
+
+        <!-- Top Right Stardew Clock & Calendar HUD -->
+        <div class="hud-clock-widget">
+            <div class="hud-date-row">
+                <div class="season-badge">
+                    <span>🌱</span>
+                    <span id="hudSeason">Primavera</span>
+                </div>
+                <div id="hudDay" class="day-badge">Seg. 1</div>
+            </div>
+            <div class="hud-time-row">
+                <div class="weather-icon" title="Ensolarado com brisa suave">☀️</div>
+                <div id="hudTime" class="time-badge">6:00 AM</div>
+            </div>
+            <div class="hud-gold-row">
+                <span class="gold-icon">🪙</span>
+                <span id="hudGold" class="gold-badge">500 g</span>
+            </div>
+        </div>
+
+        <!-- Bottom Center Wooden Hotbar (12 slots) -->
+        <div class="hotbar-container">
+            <div id="hotbarSlots" class="hotbar-slots"></div>
+        </div>
+
+        <!-- Bottom Right Energy Bar -->
+        <div class="energy-container" title="Barra de Energia do Fazendeiro">
+            <div id="energyText" class="energy-tooltip-val">100</div>
+            <div class="energy-meter">
+                <div id="energyFill" class="energy-fill" style="height: 100%;"></div>
+            </div>
+            <div class="energy-badge-icon">E</div>
+        </div>
+
+        <!-- End of Day / Sleep Ledger Modal -->
+        <div id="sleepModal" class="stardew-modal-overlay">
+            <div class="stardew-modal-box">
+                <button class="modal-close-btn" onclick="window.game.wakeUpNewDay()" title="Fechar">✖</button>
+                <div class="modal-header">🌾 Relatório de Rendimentos 🌾</div>
+                <div class="modal-content">
+                    <p style="text-align: center; margin-bottom: 8px; font-weight: bold;">
+                        Vendas depositadas no Caixote da Fazenda:
+                    </p>
+                    <div id="sleepDetails"></div>
+                    <div class="ledger-total-row">
+                        <span>Lucro Total:</span>
+                        <span id="sleepRevenue" class="revenue-val">+0 G</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="stardew-btn" onclick="window.game.wakeUpNewDay()">
+                        ☀️ Começar Novo Dia
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Guide / Controls Modal -->
+        <div id="guideModal" class="stardew-modal-overlay">
+            <div class="stardew-modal-box">
+                <button class="modal-close-btn" onclick="window.game.toggleGuideModal()" title="Fechar">✖</button>
+                <div class="modal-header">📜 Guia da Fazenda Vale Afesu 📜</div>
+                <div class="modal-content">
+                    <p style="margin-bottom: 6px;">Bem-vindo(a) à sua fazenda! Aqui está tudo o que você pode fazer:</p>
+                    
+                    <div class="controls-list">
+                        <div class="control-item">
+                            <span class="key-tag">W A S D</span> / <span class="key-tag">Setas</span>: Mover
+                        </div>
+                        <div class="control-item">
+                            <span class="key-tag">Shift</span>: Correr mais rápido
+                        </div>
+                        <div class="control-item">
+                            <span class="key-tag">1 a 9 / Roda</span>: Selecionar item
+                        </div>
+                        <div class="control-item">
+                            <span class="key-tag">Clique / Espaço / C</span>: Usar ferramenta
+                        </div>
+                        <div class="control-item">
+                            <span class="key-tag">E / Botão Dir.</span>: Acariciar animais
+                        </div>
+                        <div class="control-item">
+                            <span class="key-tag">M</span>: Ligar / Desligar Música
+                        </div>
+                    </div>
+
+                    <div class="farming-guide-box">
+                        <p><strong>🌱 Ciclo de Plantação:</strong></p>
+                        <p>1. Use a <strong>Enxada</strong> para arar a terra na grama.</p>
+                        <p>2. Selecione as <strong>Sementes</strong> (Chirívia, Morango, Abóbora, Milho) e plante no canteiro.</p>
+                        <p>3. Use o <strong>Regador</strong> para molhar a terra (recarga no laguinho à direita!).</p>
+                        <p>4. Aperte <strong>Dormir (Novo Dia)</strong> para avançar o tempo e fazer os brotos crescerem!</p>
+                        <p>5. Colha os frutos maduros e coloque no <strong>Caixote de Vendas</strong> ao lado da casa para faturar muito Ouro!</p>
+                        <p>6. Dê carinho na <strong>Galinha Pipoca</strong> e na <strong>Vaca Mimosa</strong> para ver coraçõezinhos e ovos frescos!</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="stardew-btn" onclick="window.game.toggleGuideModal()">
+                        ✅ Entendi, vamos plantar!
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SETTINGS / CONFIGURAÇÕES MODAL -->
+        <div id="settingsModal" class="stardew-modal-overlay">
+            <div class="stardew-modal-box">
+                <button class="modal-close-btn" onclick="window.game.closeSettingsModal()" title="Fechar">✖</button>
+                <div class="modal-header">⚙️ Configurações da Fazenda ⚙️</div>
+                <div class="modal-content">
+                    <div class="setting-group">
+                        <label class="setting-label">⏱️ Ritmo de Duração do Dia:</label>
+                        <div class="setting-options">
+                            <button id="btnSpeedFast" class="setting-opt-btn" onclick="window.game.setDaySpeed(2.5, 'Rápido')">Rápido (5m)</button>
+                            <button id="btnSpeedNormal" class="setting-opt-btn active" onclick="window.game.setDaySpeed(5.0, 'Normal')">Normal (10m)</button>
+                            <button id="btnSpeedSlow" class="setting-opt-btn" onclick="window.game.setDaySpeed(7.5, 'Longo')">Relaxado (15m)</button>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <label class="setting-label">🎵 Música Pastoral:</label>
+                        <div class="setting-row">
+                            <button id="btnSettingsMusicToggle" class="stardew-btn" onclick="window.game.toggleMusic()">
+                                Música: Desligada
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <label class="setting-label">🔊 Efeitos Sonoros (SFX):</label>
+                        <div class="setting-row">
+                            <button id="btnSettingsSfxToggle" class="stardew-btn active" onclick="window.game.toggleSfx()">
+                                Sons: Ligados
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="setting-group danger-group">
+                        <label class="setting-label">💾 Ações do Jogo:</label>
+                        <div class="setting-actions">
+                            <button class="stardew-btn action-menu-btn" onclick="window.game.returnToMainMenu()">
+                                🏠 Voltar ao Menu Principal
+                            </button>
+                            <button class="stardew-btn danger-btn" onclick="window.game.resetSaveData()">
+                                🗑️ Reiniciar Tudo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="stardew-btn" onclick="window.game.closeSettingsModal()">
+                        ✅ Salvar e Voltar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHARACTER CREATOR MODAL -->
+        <div id="charCreatorModal" class="stardew-modal-overlay">
+            <div class="stardew-modal-box char-creator-modal-box">
+                <button class="modal-close-btn" onclick="window.game.closeCharCreator()" title="Fechar">✖</button>
+                <div class="modal-header">🎨 Criação de Personagem 🎨</div>
+                <div class="char-creator-grid">
+                    <!-- Left: Preview stage with rotation and randomize -->
+                    <div class="char-preview-stage">
+                        <div class="stage-pedestal">
+                            <canvas id="charPreviewCanvas" width="120" height="150"></canvas>
+                        </div>
+                        <div class="stage-rotation-row">
+                            <button class="stardew-btn rot-btn" onclick="window.game.rotateCharPreview(-1)" title="Girar Esquerda">↺ Girar</button>
+                            <button class="stardew-btn rot-btn" onclick="window.game.rotateCharPreview(1)" title="Girar Direita">Girar ↻</button>
+                        </div>
+                        <button class="stardew-btn random-btn" onclick="window.game.randomizeCharacter()">
+                            🎲 Aleatório
+                        </button>
+                    </div>
+
+                    <!-- Right: Form tabs / customizable attributes -->
+                    <div class="char-options-panel">
+                        <!-- Identity -->
+                        <div class="char-section">
+                            <div class="section-title">👤 Identidade & Fazenda</div>
+                            <div class="input-row">
+                                <label for="charNameInput">Seu Nome:</label>
+                                <input type="text" id="charNameInput" class="stardew-input" value="Fazendeiro(a)" maxlength="16">
+                            </div>
+                            <div class="input-row">
+                                <label for="charFarmInput">Nome da Fazenda:</label>
+                                <input type="text" id="charFarmInput" class="stardew-input" value="Vale Afesu" maxlength="20">
+                            </div>
+                            <div class="input-row">
+                                <label>Gênero:</label>
+                                <div class="btn-group">
+                                    <button class="gender-btn active" data-gender="female" onclick="window.game.setGender('female')">👩 Feminino</button>
+                                    <button class="gender-btn" data-gender="male" onclick="window.game.setGender('male')">👨 Masculino</button>
+                                    <button class="gender-btn" data-gender="neutral" onclick="window.game.setGender('neutral')">🧑 Neutro</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Appearance: Skin, Hair, Eyes -->
+                        <div class="char-section">
+                            <div class="section-title">✨ Aparência Física</div>
+                            
+                            <!-- Skin Tone -->
+                            <div class="option-row">
+                                <span class="option-label">Tom de Pele:</span>
+                                <div class="color-chips-row">
+                                    <button class="color-chip active" style="background:#fcd0a1;" data-field="skin" data-val="#fcd0a1" onclick="window.game.updateCharCustomization('skin', '#fcd0a1')" title="Pele Clara"></button>
+                                    <button class="color-chip" style="background:#f5c396;" data-field="skin" data-val="#f5c396" onclick="window.game.updateCharCustomization('skin', '#f5c396')" title="Pele Morena"></button>
+                                    <button class="color-chip" style="background:#e0ac69;" data-field="skin" data-val="#e0ac69" onclick="window.game.updateCharCustomization('skin', '#e0ac69')" title="Pele Bronzeada"></button>
+                                    <button class="color-chip" style="background:#c68642;" data-field="skin" data-val="#c68642" onclick="window.game.updateCharCustomization('skin', '#c68642')" title="Pele Dourada"></button>
+                                    <button class="color-chip" style="background:#8d5524;" data-field="skin" data-val="#8d5524" onclick="window.game.updateCharCustomization('skin', '#8d5524')" title="Pele Escura"></button>
+                                    <button class="color-chip" style="background:#4a2c11;" data-field="skin" data-val="#4a2c11" onclick="window.game.updateCharCustomization('skin', '#4a2c11')" title="Pele Negra"></button>
+                                </div>
+                            </div>
+
+                            <!-- Hair Style -->
+                            <div class="option-row">
+                                <span class="option-label">Cabelo:</span>
+                                <div class="btn-group">
+                                    <button class="style-choice-btn" data-field="hairStyle" data-val="short" onclick="window.game.updateCharCustomization('hairStyle', 'short')">Curto</button>
+                                    <button class="style-choice-btn active" data-field="hairStyle" data-val="long" onclick="window.game.updateCharCustomization('hairStyle', 'long')">Longo</button>
+                                    <button class="style-choice-btn" data-field="hairStyle" data-val="curly" onclick="window.game.updateCharCustomization('hairStyle', 'curly')">Cacheado</button>
+                                </div>
+                            </div>
+
+                            <!-- Hair Color -->
+                            <div class="option-row">
+                                <span class="option-label">Cor do Cabelo:</span>
+                                <div class="color-chips-row">
+                                    <button class="color-chip active" style="background:#5c3317;" data-field="hairColor" data-val="#5c3317" onclick="window.game.updateCharCustomization('hairColor', '#5c3317')" title="Castanho"></button>
+                                    <button class="color-chip" style="background:#d4ac0d;" data-field="hairColor" data-val="#d4ac0d" onclick="window.game.updateCharCustomization('hairColor', '#d4ac0d')" title="Loiro"></button>
+                                    <button class="color-chip" style="background:#111111;" data-field="hairColor" data-val="#111111" onclick="window.game.updateCharCustomization('hairColor', '#111111')" title="Preto"></button>
+                                    <button class="color-chip" style="background:#c0392b;" data-field="hairColor" data-val="#c0392b" onclick="window.game.updateCharCustomization('hairColor', '#c0392b')" title="Ruivo"></button>
+                                    <button class="color-chip" style="background:#e84393;" data-field="hairColor" data-val="#e84393" onclick="window.game.updateCharCustomization('hairColor', '#e84393')" title="Rosa"></button>
+                                    <button class="color-chip" style="background:#0984e3;" data-field="hairColor" data-val="#0984e3" onclick="window.game.updateCharCustomization('hairColor', '#0984e3')" title="Azul"></button>
+                                    <button class="color-chip" style="background:#ecf0f1;" data-field="hairColor" data-val="#ecf0f1" onclick="window.game.updateCharCustomization('hairColor', '#ecf0f1')" title="Platinado"></button>
+                                </div>
+                            </div>
+
+                            <!-- Eye Color -->
+                            <div class="option-row">
+                                <span class="option-label">Olhos:</span>
+                                <div class="color-chips-row">
+                                    <button class="color-chip active" style="background:#5c3317;" data-field="eyeColor" data-val="#5c3317" onclick="window.game.updateCharCustomization('eyeColor', '#5c3317')" title="Castanho"></button>
+                                    <button class="color-chip" style="background:#222222;" data-field="eyeColor" data-val="#222222" onclick="window.game.updateCharCustomization('eyeColor', '#222222')" title="Preto"></button>
+                                    <button class="color-chip" style="background:#2980b9;" data-field="eyeColor" data-val="#2980b9" onclick="window.game.updateCharCustomization('eyeColor', '#2980b9')" title="Azul"></button>
+                                    <button class="color-chip" style="background:#27ae60;" data-field="eyeColor" data-val="#27ae60" onclick="window.game.updateCharCustomization('eyeColor', '#27ae60')" title="Verde"></button>
+                                    <button class="color-chip" style="background:#d35400;" data-field="eyeColor" data-val="#d35400" onclick="window.game.updateCharCustomization('eyeColor', '#d35400')" title="Âmbar"></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Clothes: Hat, Glasses, Shirt, Pants, Boots -->
+                        <div class="char-section">
+                            <div class="section-title">👔 Vestuário & Acessórios</div>
+
+                            <!-- Hat -->
+                            <div class="option-row">
+                                <span class="option-label">Chapéu:</span>
+                                <div class="btn-group">
+                                    <button class="style-choice-btn active" data-field="hat" data-val="straw" onclick="window.game.updateCharCustomization('hat', 'straw')">🌾 Palha</button>
+                                    <button class="style-choice-btn" data-field="hat" data-val="cap" onclick="window.game.updateCharCustomization('hat', 'cap')">🧢 Boné</button>
+                                    <button class="style-choice-btn" data-field="hat" data-val="beanie" onclick="window.game.updateCharCustomization('hat', 'beanie')">🧶 Gorro</button>
+                                    <button class="style-choice-btn" data-field="hat" data-val="flower" onclick="window.game.updateCharCustomization('hat', 'flower')">🌸 Flor</button>
+                                    <button class="style-choice-btn" data-field="hat" data-val="none" onclick="window.game.updateCharCustomization('hat', 'none')">Nenhum</button>
+                                </div>
+                            </div>
+
+                            <!-- Glasses -->
+                            <div class="option-row">
+                                <span class="option-label">Óculos:</span>
+                                <div class="btn-group">
+                                    <button class="style-choice-btn active" data-field="glasses" data-val="none" onclick="window.game.updateCharCustomization('glasses', 'none')">Nenhum</button>
+                                    <button class="style-choice-btn" data-field="glasses" data-val="round" onclick="window.game.updateCharCustomization('glasses', 'round')">👓 Retrô</button>
+                                    <button class="style-choice-btn" data-field="glasses" data-val="classic" onclick="window.game.updateCharCustomization('glasses', 'classic')">🕶️ Clássico</button>
+                                    <button class="style-choice-btn" data-field="glasses" data-val="sunglasses" onclick="window.game.updateCharCustomization('glasses', 'sunglasses')">😎 Sol</button>
+                                </div>
+                            </div>
+
+                            <!-- Shirt / Superior -->
+                            <div class="option-row">
+                                <span class="option-label">Superior (Camisa):</span>
+                                <div class="color-chips-row">
+                                    <button class="color-chip active" style="background:#d63031;" data-field="shirtColor" data-val="#d63031" onclick="window.game.updateCharCustomization('shirtColor', '#d63031')" title="Xadrez Vermelho"></button>
+                                    <button class="color-chip" style="background:#27ae60;" data-field="shirtColor" data-val="#27ae60" onclick="window.game.updateCharCustomization('shirtColor', '#27ae60')" title="Verde Floresta"></button>
+                                    <button class="color-chip" style="background:#2980b9;" data-field="shirtColor" data-val="#2980b9" onclick="window.game.updateCharCustomization('shirtColor', '#2980b9')" title="Azul Celeste"></button>
+                                    <button class="color-chip" style="background:#e67e22;" data-field="shirtColor" data-val="#e67e22" onclick="window.game.updateCharCustomization('shirtColor', '#e67e22')" title="Laranja Outono"></button>
+                                    <button class="color-chip" style="background:#8e44ad;" data-field="shirtColor" data-val="#8e44ad" onclick="window.game.updateCharCustomization('shirtColor', '#8e44ad')" title="Roxo Uva"></button>
+                                    <button class="color-chip" style="background:#ecf0f1;" data-field="shirtColor" data-val="#ecf0f1" onclick="window.game.updateCharCustomization('shirtColor', '#ecf0f1')" title="Algodão Claro"></button>
+                                </div>
+                            </div>
+
+                            <!-- Pants / Inferior -->
+                            <div class="option-row">
+                                <span class="option-label">Inferior (Tipo):</span>
+                                <div class="btn-group">
+                                    <button class="style-choice-btn active" data-field="pantsType" data-val="overalls" onclick="window.game.updateCharCustomization('pantsType', 'overalls')">👖 Jardineira</button>
+                                    <button class="style-choice-btn" data-field="pantsType" data-val="jeans" onclick="window.game.updateCharCustomization('pantsType', 'jeans')">👖 Calça</button>
+                                    <button class="style-choice-btn" data-field="pantsType" data-val="skirt" onclick="window.game.updateCharCustomization('pantsType', 'skirt')">👗 Saia</button>
+                                </div>
+                            </div>
+                            <div class="option-row">
+                                <span class="option-label">Cor da Peça Inferior:</span>
+                                <div class="color-chips-row">
+                                    <button class="color-chip active" style="background:#2e6b9e;" data-field="pantsColor" data-val="#2e6b9e" onclick="window.game.updateCharCustomization('pantsColor', '#2e6b9e')" title="Azul Jeans"></button>
+                                    <button class="color-chip" style="background:#4a3525;" data-field="pantsColor" data-val="#4a3525" onclick="window.game.updateCharCustomization('pantsColor', '#4a3525')" title="Couro Rústico"></button>
+                                    <button class="color-chip" style="background:#2c3e50;" data-field="pantsColor" data-val="#2c3e50" onclick="window.game.updateCharCustomization('pantsColor', '#2c3e50')" title="Preto Noite"></button>
+                                    <button class="color-chip" style="background:#27ae60;" data-field="pantsColor" data-val="#27ae60" onclick="window.game.updateCharCustomization('pantsColor', '#27ae60')" title="Verde Caipira"></button>
+                                    <button class="color-chip" style="background:#8c2d19;" data-field="pantsColor" data-val="#8c2d19" onclick="window.game.updateCharCustomization('pantsColor', '#8c2d19')" title="Terracota"></button>
+                                </div>
+                            </div>
+
+                            <!-- Boots / Calçados -->
+                            <div class="option-row">
+                                <span class="option-label">Calçados:</span>
+                                <div class="color-chips-row">
+                                    <button class="color-chip active" style="background:#3e2723;" data-field="bootsColor" data-val="#3e2723" onclick="window.game.updateCharCustomization('bootsColor', '#3e2723')" title="Bota de Couro Marrom"></button>
+                                    <button class="color-chip" style="background:#16a085;" data-field="bootsColor" data-val="#16a085" onclick="window.game.updateCharCustomization('bootsColor', '#16a085')" title="Galocha Verde de Campo"></button>
+                                    <button class="color-chip" style="background:#2d3436;" data-field="bootsColor" data-val="#2d3436" onclick="window.game.updateCharCustomization('bootsColor', '#2d3436')" title="Botas Pretas"></button>
+                                    <button class="color-chip" style="background:#bdc3c7;" data-field="bootsColor" data-val="#bdc3c7" onclick="window.game.updateCharCustomization('bootsColor', '#bdc3c7')" title="Tênis Urbano Branco"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="stardew-btn primary confirm-char-btn" onclick="window.game.confirmCharacterCreation()">
+                        🌾 Confirmar Criação & Começar Jornada!
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- HOUSE INTERIOR MODAL -->
+        <div id="houseInteriorModal" class="stardew-modal-overlay">
+            <div class="stardew-modal-box house-modal-box">
+                <button class="modal-close-btn" onclick="window.game.closeHouseInterior()" title="Sair da Casa">✖</button>
+                <div class="modal-header">🏡 Interior da Cabana de Madeira 🏡</div>
+                <div class="house-interior-content">
+                    <!-- Top cozy banner -->
+                    <div class="house-welcome-banner">
+                        <span class="house-banner-icon">🪵</span>
+                        <span>Seu lar seguro e aconchegante. Descanse, cozinhe delícias e acompanhe as notícias do Vale!</span>
+                    </div>
+
+                    <!-- Room Stations Grid -->
+                    <div class="house-stations-grid">
+                        <!-- Station 1: Bed -->
+                        <div class="house-station-card bed-card">
+                            <div class="station-icon">🛏️</div>
+                            <div class="station-title">Cama Macia</div>
+                            <div class="station-desc">Recupere suas energias e acorde descansado para as tarefas do novo dia.</div>
+                            <button class="stardew-btn primary" onclick="window.game.sleepInHouseBed()">
+                                💤 Dormir na Cama
+                            </button>
+                        </div>
+
+                        <!-- Station 2: Stove / Kitchen -->
+                        <div class="house-station-card stove-card">
+                            <div class="station-icon">🍳</div>
+                            <div class="station-title">Fogão Caipira a Lenha</div>
+                            <div class="station-desc">Cozinhe refeições nutritivas com os ovos e colheitas da sua fazenda!</div>
+                            <div id="cookingRecipeList" class="recipes-container"></div>
+                        </div>
+
+                        <!-- Station 3: TV -->
+                        <div class="house-station-card tv-card">
+                            <div class="station-icon">📺</div>
+                            <div class="station-title">Televisão do Vale</div>
+                            <div id="tvOutput" class="tv-screen-box">
+                                Ligue a TV abaixo para sintonizar a previsão do tempo e segredos culinários...
+                            </div>
+                            <div class="tv-buttons-row">
+                                <button class="stardew-btn tv-btn" onclick="window.game.watchTV('weather')">☀️ Clima</button>
+                                <button class="stardew-btn tv-btn" onclick="window.game.watchTV('tips')">🌾 Dicas</button>
+                                <button class="stardew-btn tv-btn" onclick="window.game.watchTV('fortune')">🔮 Vidente</button>
+                            </div>
+                        </div>
+
+                        <!-- Station 4: Fireplace -->
+                        <div class="house-station-card fireplace-card">
+                            <div class="station-icon">🔥</div>
+                            <div class="station-title">Lareira de Pedra</div>
+                            <div class="station-desc">
+                                Status: <strong id="fireplaceStatus" style="color: #e67e22;">Acesa com brasas acolhedoras</strong>
+                            </div>
+                            <button id="btnToggleFireplace" class="stardew-btn" onclick="window.game.toggleFireplace()">
+                                🔥 Apagar Lareira
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="stardew-btn" onclick="window.game.closeHouseInterior()">
+                        🚪 Sair para a Fazenda
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- START / MAIN MENU SCREEN -->
+        <div id="mainMenuScreen" class="fullscreen-screen">
+            <div class="menu-sky-bg">
+                <div class="cloud cloud-1"></div>
+                <div class="cloud cloud-2"></div>
+                <div class="cloud cloud-3"></div>
+            </div>
+
+            <div class="title-logo-container">
+                <div class="stardew-wood-sign">
+                    <div class="stardew-title-main">VALE AFESU</div>
+                    <div class="stardew-subtitle">~ Edição Fazenda Web ~</div>
+                </div>
+            </div>
+
+            <div class="menu-buttons-panel">
+                <button class="menu-stardew-btn primary" onclick="window.game.startNewGameStory()">
+                    🌟 Novo Jogo
+                </button>
+                <button id="btnMenuContinue" class="menu-stardew-btn" onclick="window.game.continueGame()">
+                    💾 Continuar Fazenda
+                </button>
+                <button class="menu-stardew-btn" onclick="window.game.openSettingsModal()">
+                    ⚙️ Configurações
+                </button>
+                <button class="menu-stardew-btn" onclick="window.game.toggleGuideModal()">
+                    📜 Como Jogar
+                </button>
+            </div>
+
+            <div class="menu-footer-credit">
+                Desenvolvimento de Jogos Digitais • HTML5 Canvas & Web Audio API
+            </div>
+        </div>
+
+        <!-- STORY INTRO CUTSCENE SCREEN -->
+        <div id="cutsceneScreen" class="fullscreen-screen" style="display: none;">
+            <div class="cutscene-backdrop"></div>
+            <div class="cutscene-card">
+                <div class="cutscene-header">
+                    <span id="cutsceneChapterBadge" class="chapter-badge">História: Prólogo</span>
+                    <button class="stardew-btn skip-btn" onclick="window.game.skipCutscene()">
+                        ⏭️ Pular Introdução (Esc)
+                    </button>
+                </div>
+
+                <div class="cutscene-illustration">
+                    <div id="cutsceneVisualIcon" class="cutscene-pixel-art">✉️</div>
+                </div>
+
+                <div class="cutscene-parchment">
+                    <h3 id="cutsceneTitle" class="cutscene-parchment-title">A Carta Selada do Vovô</h3>
+                    <p id="cutsceneText" class="cutscene-text"></p>
+                    <span id="cutsceneCursor" class="typewriter-cursor">|</span>
+                </div>
+
+                <div class="cutscene-footer">
+                    <span class="cutscene-tip">Pressione <strong>Espaço</strong> para continuar</span>
+                    <button id="btnCutsceneNext" class="stardew-btn next-scene-btn" onclick="window.game.advanceCutscene()">
+                        Avançar História ▸
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Scripts -->
+    <script src="js/audio.js"></script>
+    <script src="js/sprites.js"></script>
+    <script src="js/world.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

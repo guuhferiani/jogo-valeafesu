@@ -1,0 +1,1356 @@
+/*
+ * Stardew Valley Web Prototype - Styling
+ * Authentic Stardew wooden frames, parchment modals, pixelated fonts, and retro UI widgets.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root {
+    --wood-dark: #3b1d0c;
+    --wood-mid: #783e18;
+    --wood-light: #ab6029;
+    --wood-border: #da8e43;
+    --parchment: #fbeecb;
+    --parchment-border: #c49856;
+    --gold: #f1c40f;
+    --gold-shadow: #b7791f;
+    --energy-green: #2ecc71;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #1e272e;
+    font-family: 'VT323', monospace;
+    color: #3b1d0c;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+#gameContainer {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: #000;
+}
+
+canvas#gameCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+/* TOP LEFT CONTROLS BAR */
+.top-bar-controls {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    z-index: 20;
+    max-width: 55vw;
+}
+
+.stardew-btn {
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    background: linear-gradient(to bottom, #d28c4b, #934f1d);
+    color: #fff8e7;
+    border: 3px solid var(--wood-dark);
+    border-radius: 6px;
+    padding: 4px 10px;
+    cursor: pointer;
+    text-shadow: 1px 1px 0px #000;
+    box-shadow: 2px 2px 0px rgba(0,0,0,0.5), inset 1px 1px 0px #f5b977;
+    transition: transform 0.08s ease, filter 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.stardew-btn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+
+.stardew-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0px 1px 0px rgba(0,0,0,0.5);
+}
+
+.stardew-btn.active {
+    background: linear-gradient(to bottom, #2ecc71, #27ae60);
+    border-color: #1e5a2f;
+}
+
+/* TOP RIGHT CLOCK & DATE HUD */
+.hud-clock-widget {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 145px;
+    background: #965324;
+    border: 3px solid var(--wood-dark);
+    border-radius: 8px;
+    box-shadow: 2px 3px 0px rgba(0,0,0,0.6), inset 2px 2px 0px #d48d48;
+    padding: 6px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    z-index: 20;
+}
+
+.hud-date-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #5a2e12;
+    padding-bottom: 3px;
+}
+
+.season-badge {
+    font-size: 17px;
+    color: #ffeaa7;
+    text-shadow: 1px 1px 0px #000;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.day-badge {
+    font-size: 19px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 1px 1px 0px #000;
+}
+
+.hud-time-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 0;
+}
+
+.weather-icon {
+    font-size: 17px;
+}
+
+.time-badge {
+    font-size: 19px;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    text-shadow: 1px 1px 0px #000;
+}
+
+.hud-gold-row {
+    background: #4a2811;
+    border: 2px solid #361b0a;
+    border-radius: 4px;
+    padding: 2px 6px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+}
+
+.gold-icon {
+    font-size: 14px;
+}
+
+.gold-badge {
+    font-size: 18px;
+    color: #f1c40f;
+    font-weight: bold;
+    text-shadow: 1px 1px 0px #000;
+}
+
+/* BOTTOM CENTER HOTBAR */
+.hotbar-container {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #8b4a1e;
+    border: 4px solid var(--wood-dark);
+    border-radius: 8px;
+    box-shadow: 3px 4px 0px rgba(0,0,0,0.6), inset 2px 2px 0px #c77b3b;
+    padding: 6px 8px;
+    z-index: 20;
+}
+
+.hotbar-slots {
+    display: flex;
+    gap: 6px;
+}
+
+.hotbar-slot {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    background: #50280e;
+    border: 3px solid #331706;
+    border-radius: 5px;
+    box-shadow: inset 2px 2px 4px rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.08s ease, border-color 0.1s ease;
+}
+
+.hotbar-slot:hover {
+    filter: brightness(1.2);
+}
+
+.hotbar-slot.selected {
+    border: 3px solid #f1c40f;
+    box-shadow: 0 0 8px rgba(241, 196, 15, 0.8), inset 0 0 4px rgba(241, 196, 15, 0.4);
+    transform: translateY(-4px);
+}
+
+.slot-key {
+    position: absolute;
+    top: 1px;
+    left: 3px;
+    font-size: 14px;
+    color: #cfd8dc;
+    text-shadow: 1px 1px 0 #000;
+}
+
+.slot-icon {
+    width: 32px;
+    height: 32px;
+    image-rendering: pixelated;
+}
+
+.slot-count {
+    position: absolute;
+    bottom: 0px;
+    right: 3px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+}
+
+.slot-water-gauge {
+    position: absolute;
+    bottom: 2px;
+    left: 4px;
+    right: 4px;
+    height: 4px;
+    background: #222;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.water-fill {
+    height: 100%;
+    background: #3498db;
+    transition: width 0.2s ease;
+}
+
+/* BOTTOM RIGHT ENERGY BAR */
+.energy-container {
+    position: absolute;
+    bottom: 16px;
+    right: 18px;
+    width: 28px;
+    height: 170px;
+    background: #8b4a1e;
+    border: 4px solid var(--wood-dark);
+    border-radius: 6px;
+    box-shadow: 3px 4px 0px rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3px;
+    z-index: 20;
+}
+
+.energy-meter {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    background: #3a1c09;
+    border: 2px solid #251004;
+    border-radius: 3px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.energy-fill {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, #27ae60, #2ecc71);
+    box-shadow: inset 1px 0px 2px rgba(255,255,255,0.4);
+    transition: height 0.25s ease, background 0.3s ease;
+}
+
+.energy-badge-icon {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffeaa7;
+    text-shadow: 1px 1px 0 #000;
+    margin-top: 2px;
+}
+
+.energy-tooltip-val {
+    position: absolute;
+    top: -24px;
+    font-size: 16px;
+    color: #fff;
+    text-shadow: 1px 1px 0 #000;
+    white-space: nowrap;
+}
+
+/* MODALS: SLEEP & LEDGER, HELP GUIDE */
+.stardew-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 14px;
+    box-sizing: border-box;
+    backdrop-filter: blur(2px);
+    overflow-y: auto;
+}
+
+.stardew-modal-overlay.visible {
+    display: flex;
+}
+
+.stardew-modal-box {
+    position: relative;
+    width: 490px;
+    max-width: 95vw;
+    max-height: 86vh;
+    background: var(--parchment);
+    border: 5px solid var(--wood-dark);
+    border-radius: 8px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.85), inset 0 0 12px rgba(139, 69, 19, 0.25);
+    padding: 14px 18px 14px 18px;
+    color: #4a240c;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 26px;
+    height: 26px;
+    background: #c0392b;
+    color: #fff;
+    border: 2px solid #5a1810;
+    border-radius: 4px;
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    line-height: 1;
+    box-shadow: 1px 2px 0 rgba(0,0,0,0.5);
+    transition: transform 0.08s ease, background 0.15s ease;
+}
+
+.modal-close-btn:hover {
+    background: #e74c3c;
+    transform: scale(1.08);
+}
+
+.modal-close-btn:active {
+    transform: scale(0.95);
+}
+
+.modal-header {
+    text-align: center;
+    font-size: 24px;
+    color: #783e18;
+    border-bottom: 3px double #b07e4d;
+    padding-bottom: 4px;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 0px #fff;
+    flex-shrink: 0;
+    padding-right: 28px; /* space for close button */
+}
+
+.modal-content {
+    font-size: 17px;
+    line-height: 1.35;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding-right: 6px;
+    margin-bottom: 10px;
+}
+
+/* Custom retro scrollbar */
+.modal-content::-webkit-scrollbar,
+.ledger-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track,
+.ledger-list::-webkit-scrollbar-track {
+    background: #e8ce9b;
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb,
+.ledger-list::-webkit-scrollbar-thumb {
+    background: #934f1d;
+    border-radius: 4px;
+    border: 1px solid #5a2e12;
+}
+
+.ledger-list {
+    background: #f4e1b6;
+    border: 2px solid #c99c62;
+    border-radius: 6px;
+    padding: 8px 12px;
+    max-height: 150px;
+    overflow-y: auto;
+    margin-bottom: 8px;
+}
+
+.ledger-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+    border-bottom: 1px dotted #b07e4d;
+}
+
+.empty-bin {
+    color: #8c5d33;
+    font-style: italic;
+    text-align: center;
+    padding: 6px 0;
+}
+
+.ledger-total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 22px;
+    font-weight: bold;
+    color: #934f1d;
+    padding-top: 4px;
+}
+
+.revenue-val {
+    color: #27ae60;
+    text-shadow: 1px 1px 0 #fff;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-shrink: 0;
+    padding-top: 4px;
+}
+
+/* GUIDE / HELP STYLING */
+.controls-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.control-item {
+    background: #f3dfb2;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #c99c62;
+    font-size: 16px;
+}
+
+.key-tag {
+    display: inline-block;
+    background: #783e18;
+    color: #fff;
+    padding: 0px 5px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.farming-guide-box {
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 1.35;
+    background: #faeac4;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px dashed #b07e4d;
+}
+
+/* MEDIA QUERIES FOR COMPACT / LAPTOP SCREENS */
+@media (max-height: 680px) {
+    .stardew-modal-box {
+        max-height: 92vh;
+        padding: 10px 14px;
+    }
+    .modal-header {
+        font-size: 20px;
+        margin-bottom: 6px;
+    }
+    .modal-content {
+        font-size: 15px;
+    }
+    .controls-list {
+        gap: 4px;
+    }
+    .control-item {
+        padding: 3px 6px;
+        font-size: 14px;
+    }
+    .farming-guide-box {
+        font-size: 14px;
+        padding: 6px 8px;
+    }
+    .energy-container {
+        height: 130px;
+    }
+    .hotbar-slot {
+        width: 40px;
+        height: 40px;
+    }
+    .slot-icon {
+        width: 26px;
+        height: 26px;
+    }
+}
+
+/* ==========================================================================
+   FULLSCREEN SCREENS (MAIN MENU & STORY CUTSCENE)
+   ========================================================================== */
+
+.fullscreen-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 800;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* MAIN MENU SKY & CLOUDS */
+.menu-sky-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, #4aa3df 0%, #82c4f1 55%, #b6e2fe 80%, #76b852 100%);
+    z-index: -1;
+    overflow: hidden;
+}
+
+.cloud {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 20px;
+    filter: drop-shadow(2px 3px 0px rgba(0,0,0,0.15));
+}
+
+.cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: inherit;
+    border-radius: 50%;
+}
+
+.cloud-1 {
+    width: 140px;
+    height: 36px;
+    top: 15%;
+    left: -150px;
+    animation: driftClouds 32s linear infinite;
+}
+.cloud-1::before { width: 50px; height: 50px; top: -22px; left: 24px; }
+.cloud-1::after { width: 60px; height: 60px; top: -30px; right: 28px; }
+
+.cloud-2 {
+    width: 190px;
+    height: 44px;
+    top: 32%;
+    left: -200px;
+    animation: driftClouds 45s linear infinite 12s;
+}
+.cloud-2::before { width: 65px; height: 65px; top: -30px; left: 35px; }
+.cloud-2::after { width: 75px; height: 75px; top: -38px; right: 40px; }
+
+.cloud-3 {
+    width: 120px;
+    height: 30px;
+    top: 50%;
+    left: -130px;
+    animation: driftClouds 28s linear infinite 6s;
+}
+.cloud-3::before { width: 42px; height: 42px; top: -18px; left: 20px; }
+.cloud-3::after { width: 50px; height: 50px; top: -24px; right: 24px; }
+
+@keyframes driftClouds {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(100vw + 300px)); }
+}
+
+/* STARDEW TITLE LOGO */
+.title-logo-container {
+    margin-bottom: 24px;
+    text-align: center;
+    z-index: 10;
+}
+
+.stardew-wood-sign {
+    background: #8b4a1e;
+    border: 6px solid var(--wood-dark);
+    border-radius: 12px;
+    box-shadow: 0 10px 0px #2a1205, 0 16px 25px rgba(0,0,0,0.5), inset 0 0 15px #ba692d;
+    padding: 18px 36px;
+    transform: rotate(-1.5deg);
+    transition: transform 0.3s ease;
+}
+
+.stardew-wood-sign:hover {
+    transform: rotate(0deg) scale(1.02);
+}
+
+.stardew-title-main {
+    font-size: 56px;
+    font-weight: bold;
+    color: #fce46d;
+    letter-spacing: 4px;
+    text-shadow: 4px 4px 0px #b85c18, 7px 7px 0px #3b1d0c, 0 0 12px rgba(255,230,100,0.6);
+    line-height: 1;
+}
+
+.stardew-subtitle {
+    font-size: 22px;
+    color: #fff4d1;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 0px #3b1d0c;
+    margin-top: 6px;
+}
+
+/* MENU BUTTONS */
+.menu-buttons-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 280px;
+    z-index: 10;
+}
+
+.menu-stardew-btn {
+    font-family: 'VT323', monospace;
+    font-size: 24px;
+    background: linear-gradient(to bottom, #d28c4b, #934f1d);
+    color: #fff9e6;
+    border: 4px solid var(--wood-dark);
+    border-radius: 8px;
+    padding: 10px 16px;
+    cursor: pointer;
+    text-shadow: 2px 2px 0px #2a1205;
+    box-shadow: 0 5px 0px #2a1205, 0 8px 15px rgba(0,0,0,0.4), inset 2px 2px 0px #f5b977;
+    transition: transform 0.08s ease, filter 0.15s ease;
+    text-align: center;
+}
+
+.menu-stardew-btn:hover {
+    filter: brightness(1.12);
+    transform: translateY(-2px);
+    box-shadow: 0 7px 0px #2a1205, 0 10px 18px rgba(0,0,0,0.5);
+}
+
+.menu-stardew-btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0px #2a1205;
+}
+
+.menu-stardew-btn.primary {
+    background: linear-gradient(to bottom, #2ecc71, #219653);
+    border-color: #134e2a;
+    font-size: 26px;
+    box-shadow: 0 5px 0px #134e2a, 0 8px 15px rgba(0,0,0,0.4), inset 2px 2px 0px #7bed9f;
+}
+
+.menu-stardew-btn.primary:hover {
+    box-shadow: 0 7px 0px #134e2a, 0 10px 18px rgba(0,0,0,0.5);
+}
+
+.menu-footer-credit {
+    position: absolute;
+    bottom: 12px;
+    font-size: 16px;
+    color: #274d1a;
+    text-shadow: 1px 1px 0px rgba(255,255,255,0.6);
+}
+
+/* ==========================================================================
+   STORY INTRO CUTSCENE STYLING
+   ========================================================================== */
+
+.cutscene-backdrop {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, #1b263b 0%, #0d131a 85%);
+    opacity: 0.95;
+    z-index: -1;
+}
+
+.cutscene-card {
+    width: 640px;
+    max-width: 94vw;
+    max-height: 90vh;
+    background: var(--parchment);
+    border: 6px solid var(--wood-dark);
+    border-radius: 12px;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.9), inset 0 0 20px rgba(139, 69, 19, 0.3);
+    padding: 18px 24px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    color: #4a240c;
+}
+
+.cutscene-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #b07e4d;
+    padding-bottom: 8px;
+    margin-bottom: 14px;
+}
+
+.chapter-badge {
+    font-size: 20px;
+    font-weight: bold;
+    color: #934f1d;
+    text-shadow: 1px 1px 0 #fff;
+}
+
+.skip-btn {
+    font-size: 15px;
+    padding: 3px 8px;
+}
+
+.cutscene-illustration {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.cutscene-pixel-art {
+    font-size: 58px;
+    background: #fae6bd;
+    border: 3px solid #b07e4d;
+    border-radius: 12px;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.15), 2px 4px 8px rgba(0,0,0,0.25);
+    animation: gentleBob 2.5s ease-in-out infinite;
+}
+
+@keyframes gentleBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+.cutscene-parchment {
+    background: #fdf5df;
+    border: 2px solid #c99c62;
+    border-radius: 8px;
+    padding: 16px 20px;
+    min-height: 120px;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 14px;
+    box-shadow: inset 1px 2px 5px rgba(0,0,0,0.1);
+    scrollbar-width: thin;
+    scrollbar-color: #934f1d #e8ce9b;
+}
+
+.cutscene-parchment-title {
+    font-size: 22px;
+    color: #783e18;
+    margin-bottom: 8px;
+    border-bottom: 1px dashed #c99c62;
+    padding-bottom: 4px;
+}
+
+.cutscene-text {
+    font-size: 19px;
+    line-height: 1.4;
+    color: #3b1d0c;
+    display: inline;
+}
+
+.typewriter-cursor {
+    display: inline-block;
+    font-size: 20px;
+    font-weight: bold;
+    color: #934f1d;
+    animation: blinkCursor 0.7s infinite;
+}
+
+@keyframes blinkCursor {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+.cutscene-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 6px;
+    border-top: 1px solid #b07e4d;
+}
+
+.cutscene-tip {
+    font-size: 15px;
+    color: #7a4e28;
+}
+
+.next-scene-btn {
+    font-size: 18px;
+    padding: 6px 16px;
+    background: linear-gradient(to bottom, #2ecc71, #27ae60);
+    border-color: #1e5a2f;
+}
+
+/* ==========================================================================
+   SETTINGS MODAL ENHANCEMENTS
+   ========================================================================== */
+
+.setting-group {
+    background: #faeac4;
+    border: 1px solid #c99c62;
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+}
+
+.setting-label {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    color: #783e18;
+    margin-bottom: 6px;
+}
+
+.setting-options {
+    display: flex;
+    gap: 8px;
+}
+
+.setting-opt-btn {
+    flex: 1;
+    font-family: 'VT323', monospace;
+    font-size: 17px;
+    background: #dfbc86;
+    border: 2px solid #783e18;
+    border-radius: 5px;
+    padding: 4px 6px;
+    cursor: pointer;
+    color: #3b1d0c;
+    transition: all 0.1s ease;
+}
+
+.setting-opt-btn:hover {
+    background: #ebd2a4;
+}
+
+.setting-opt-btn.active {
+    background: #27ae60;
+    color: #fff;
+    border-color: #145a32;
+    font-weight: bold;
+    box-shadow: inset 1px 1px 3px rgba(0,0,0,0.4);
+}
+
+.setting-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.setting-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-menu-btn {
+    background: linear-gradient(to bottom, #3498db, #2980b9);
+    border-color: #1b4f72;
+    flex: 1;
+    justify-content: center;
+}
+
+.danger-btn {
+    background: linear-gradient(to bottom, #e74c3c, #c0392b);
+    border-color: #641e16;
+    flex: 1;
+    justify-content: center;
+}
+
+/* ==========================================================================
+   CHARACTER CREATOR MODAL STYLES
+   ========================================================================== */
+
+.char-creator-modal-box {
+    max-width: 840px;
+    width: 95vw;
+    max-height: 92vh;
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+}
+
+.char-creator-grid {
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 16px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+/* Left: Character Preview Stage */
+.char-preview-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #faeac4;
+    border: 2px solid #b07e4d;
+    border-radius: 8px;
+    padding: 12px 10px;
+    box-shadow: inset 0 0 10px rgba(120, 62, 24, 0.15);
+}
+
+.stage-pedestal {
+    width: 140px;
+    height: 165px;
+    background: radial-gradient(circle at 50% 80%, #d4ac6e 0%, #ebd2a4 55%, #faeac4 100%);
+    border: 2px dashed #c99c62;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+#charPreviewCanvas {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+.stage-rotation-row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.rot-btn {
+    flex: 1;
+    font-size: 16px;
+    padding: 4px 6px;
+    justify-content: center;
+}
+
+.random-btn {
+    width: 100%;
+    font-size: 17px;
+    padding: 6px;
+    justify-content: center;
+    background: linear-gradient(to bottom, #9b59b6, #8e44ad);
+    border-color: #5b2c6f;
+    color: #fff;
+}
+
+.random-btn:hover {
+    background: linear-gradient(to bottom, #af7ac5, #9b59b6);
+}
+
+/* Right: Customizable Options Panel */
+.char-options-panel {
+    max-height: 64vh;
+    overflow-y: auto;
+    padding-right: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.char-options-panel::-webkit-scrollbar {
+    width: 8px;
+}
+
+.char-options-panel::-webkit-scrollbar-track {
+    background: #eed5a1;
+    border-radius: 4px;
+}
+
+.char-options-panel::-webkit-scrollbar-thumb {
+    background: #934f1d;
+    border-radius: 4px;
+}
+
+.char-section {
+    background: #faeac4;
+    border: 1px solid #c99c62;
+    border-radius: 6px;
+    padding: 10px 12px;
+}
+
+.section-title {
+    font-size: 19px;
+    font-weight: bold;
+    color: #783e18;
+    border-bottom: 1px dashed #b07e4d;
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+}
+
+.input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.input-row label {
+    font-size: 17px;
+    font-weight: bold;
+    color: #4a2c14;
+    min-width: 90px;
+}
+
+.stardew-input {
+    flex: 1;
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    padding: 4px 8px;
+    background: #fff8eb;
+    border: 2px solid #783e18;
+    border-radius: 4px;
+    color: #2e1a0b;
+    outline: none;
+}
+
+.stardew-input:focus {
+    border-color: #27ae60;
+    box-shadow: 0 0 5px rgba(39, 174, 96, 0.5);
+}
+
+.btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.gender-btn, .style-choice-btn {
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    padding: 3px 8px;
+    background: #dfbc86;
+    border: 2px solid #783e18;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #3b1d0c;
+    transition: all 0.1s ease;
+}
+
+.gender-btn:hover, .style-choice-btn:hover {
+    background: #ebd2a4;
+}
+
+.gender-btn.active, .style-choice-btn.active {
+    background: #27ae60;
+    color: #fff;
+    border-color: #145a32;
+    font-weight: bold;
+    box-shadow: inset 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.option-row {
+    margin-bottom: 8px;
+}
+
+.option-label {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #5c381c;
+    margin-bottom: 4px;
+}
+
+.color-chips-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+}
+
+.color-chip {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    border: 2px solid #5a3010;
+    cursor: pointer;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.25);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.color-chip:hover {
+    transform: scale(1.1);
+}
+
+.color-chip.active {
+    outline: 3px solid #f1c40f;
+    outline-offset: 1px;
+    transform: scale(1.15);
+    box-shadow: 0 0 6px rgba(241, 196, 15, 0.8);
+}
+
+.confirm-char-btn {
+    font-size: 20px;
+    padding: 8px 24px;
+    margin-top: 4px;
+}
+
+/* ==========================================================================
+   HOUSE INTERIOR MODAL STYLES
+   ========================================================================== */
+
+.house-modal-box {
+    max-width: 860px;
+    width: 95vw;
+    max-height: 92vh;
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    background: #edd3a4;
+    border-color: #5c3316;
+}
+
+.house-interior-content {
+    overflow-y: auto;
+    max-height: 68vh;
+    padding-right: 6px;
+}
+
+.house-welcome-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #faeac4;
+    border: 1px solid #b07e4d;
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    font-size: 18px;
+    color: #5c381c;
+}
+
+.house-banner-icon {
+    font-size: 24px;
+}
+
+.house-stations-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.house-station-card {
+    background: #faeac4;
+    border: 2px solid #b07e4d;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.station-icon {
+    font-size: 26px;
+    margin-bottom: 4px;
+}
+
+.station-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #783e18;
+    margin-bottom: 4px;
+}
+
+.station-desc {
+    font-size: 16px;
+    color: #4a2c14;
+    margin-bottom: 10px;
+    line-height: 1.3;
+}
+
+/* Stove / Cooking Card */
+.stove-card {
+    grid-row: span 2;
+}
+
+.recipes-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 330px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.recipe-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff8eb;
+    border: 1px solid #c99c62;
+    border-radius: 6px;
+    padding: 8px 10px;
+    transition: all 0.15s ease;
+}
+
+.recipe-card.available {
+    background: #f4fcf6;
+    border-color: #27ae60;
+}
+
+.recipe-card.locked {
+    opacity: 0.75;
+    background: #fdf6ea;
+}
+
+.recipe-icon {
+    font-size: 24px;
+}
+
+.recipe-info {
+    flex: 1;
+}
+
+.recipe-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #783e18;
+}
+
+.recipe-desc {
+    font-size: 14px;
+    color: #664121;
+}
+
+.recipe-req {
+    font-size: 13px;
+    color: #2c3e50;
+    margin-top: 2px;
+}
+
+.recipe-buff {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.cook-btn {
+    font-size: 15px;
+    padding: 4px 8px;
+    white-space: nowrap;
+}
+
+.cook-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #bdc3c7;
+    border-color: #7f8c8d;
+    color: #444;
+}
+
+/* TV screen */
+.tv-screen-box {
+    background: #111a14;
+    color: #a3e635;
+    border: 3px solid #4a3525;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 16px;
+    line-height: 1.35;
+    min-height: 55px;
+    margin-bottom: 10px;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.8);
+    text-shadow: 0 0 3px rgba(163, 230, 53, 0.6);
+}
+
+.tv-buttons-row {
+    display: flex;
+    gap: 6px;
+}
+
+.tv-btn {
+    flex: 1;
+    font-size: 15px;
+    padding: 4px;
+    justify-content: center;
+}
+
+/* RESPONSIVE FOR CHARACTER CREATOR & HOUSE INTERIOR */
+@media (max-width: 720px) {
+    .char-creator-grid {
+        grid-template-columns: 1fr;
+    }
+    .char-preview-stage {
+        flex-direction: row;
+        gap: 12px;
+        justify-content: center;
+    }
+    .stage-pedestal {
+        width: 100px;
+        height: 120px;
+        margin-bottom: 0;
+    }
+    .stage-rotation-row {
+        flex-direction: column;
+        width: auto;
+    }
+    .random-btn {
+        width: auto;
+    }
+    .house-stations-grid {
+        grid-template-columns: 1fr;
+    }
+    .stove-card {
+        grid-row: span 1;
+    }
+}
+
