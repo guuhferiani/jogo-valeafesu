@@ -27,11 +27,14 @@ var walk_cycle: float = 0.0
 @onready var heart_mesh: Node3D = $HeartIndicator
 @onready var head_node: Node3D = $Visuals/Head
 
+var base_heart_y: float = 0.8
+
 func _ready() -> void:
 	TimeManager.day_advanced.connect(_on_new_day)
 	TimeManager.time_tick.connect(_on_time_tick)
 	change_state(State.IDLE)
 	if heart_mesh:
+		base_heart_y = heart_mesh.position.y
 		heart_mesh.visible = false
 
 func _physics_process(delta: float) -> void:
@@ -72,11 +75,14 @@ func _physics_process(delta: float) -> void:
 			velocity.x = 0
 			velocity.z = 0
 			if heart_mesh:
-				heart_mesh.rotate_y(delta * 3.0)
-				heart_mesh.position.y = 1.6 + sin(state_timer * 6.0) * 0.1
+				heart_mesh.rotate_y(delta * 2.8)
+				heart_mesh.position.y = base_heart_y + sin(state_timer * 6.0) * 0.06
+				var pulse = 1.0 + sin(state_timer * 9.0) * 0.12
+				heart_mesh.scale = Vector3(pulse, pulse, pulse)
 			if state_timer <= 0:
 				if heart_mesh:
 					heart_mesh.visible = false
+					heart_mesh.scale = Vector3.ONE
 				change_state(State.IDLE)
 
 		State.SLEEPING:

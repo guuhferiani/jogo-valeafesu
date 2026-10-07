@@ -1,6 +1,7 @@
 [gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/ai/chicken_3d.gd" id="1_chicken"]
+[ext_resource type="ArrayMesh" uid="uid://de185odr8c8yb" path="res://assets/models/heart.obj" id="2_heart_mesh"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1"]
 size = Vector3(0.4, 0.45, 0.45)
@@ -31,14 +32,11 @@ material = SubResource("Mat_White")
 size = Vector3(0.05, 0.2, 0.26)
 
 [sub_resource type="StandardMaterial3D" id="Mat_Heart"]
-albedo_color = Color(0.9, 0.2, 0.4, 1)
+albedo_color = Color(1.0, 0.15, 0.4, 1)
+roughness = 0.25
 emission_enabled = true
-emission = Color(0.9, 0.2, 0.4, 1)
-emission_energy_multiplier = 0.5
-
-[sub_resource type="BoxMesh" id="BoxMesh_heart"]
-material = SubResource("Mat_Heart")
-size = Vector3(0.18, 0.18, 0.18)
+emission = Color(1.0, 0.15, 0.4, 1)
+emission_energy_multiplier = 0.8
 
 [node name="Chicken" type="CharacterBody3D"]
 collision_layer = 2
@@ -79,8 +77,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0.28, 0)
 mesh = SubResource("BoxMesh_wing")
 
 [node name="HeartIndicator" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
 visible = false
 
 [node name="Mesh" type="MeshInstance3D" parent="HeartIndicator"]
-mesh = SubResource("BoxMesh_heart")
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0, 0, 0)
+material_override = SubResource("Mat_Heart")
+mesh = ExtResource("2_heart_mesh")
