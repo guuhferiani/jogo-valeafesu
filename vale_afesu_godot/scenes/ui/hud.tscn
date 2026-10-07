@@ -33,6 +33,11 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 10
 text = "🛏️ Dormir (Avançar Dia)"
 
+[node name="MenuButton" type="Button" parent="TopBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "📜 Menu / Ajuda (Esc)"
+
 [node name="EnergyPanel" type="VBoxContainer" parent="."]
 offset_left = 10.0
 offset_top = 40.0

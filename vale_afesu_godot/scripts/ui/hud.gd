@@ -11,6 +11,7 @@ extends CanvasLayer
 @onready var hotbar_slots: HBoxContainer = $HotbarContainer/Slots
 @onready var notification_label: Label = $NotificationPanel/NotificationLabel
 @onready var sleep_button: Button = $TopBar/SleepButton
+@onready var menu_button: Button = $TopBar/MenuButton
 
 var notify_timer: float = 0.0
 
@@ -25,6 +26,12 @@ func _ready() -> void:
 	
 	if sleep_button:
 		sleep_button.pressed.connect(_on_sleep_button_pressed)
+	if menu_button:
+		menu_button.pressed.connect(func():
+			var menu = get_tree().root.find_child("MainMenu", true, false)
+			if menu:
+				menu.toggle_menu()
+		)
 	
 	setup_hotbar()
 	update_clock_display()

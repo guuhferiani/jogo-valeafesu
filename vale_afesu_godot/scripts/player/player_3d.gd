@@ -13,6 +13,8 @@ const JUMP_VELOCITY: float = 4.5
 @onready var visual_root: Node3D = $Visuals
 @onready var leg_left: Node3D = $Visuals/LegLeft
 @onready var leg_right: Node3D = $Visuals/LegRight
+@onready var arm_left: Node3D = $Visuals/ArmLeft
+@onready var arm_right: Node3D = $Visuals/ArmRight
 @onready var body_mesh: Node3D = $Visuals/Body
 
 var facing_direction: Vector3 = Vector3.BACK
@@ -32,6 +34,8 @@ func _physics_process(delta: float) -> void:
 			is_acting = false
 			if visual_root:
 				visual_root.rotation.x = 0.0
+			if arm_right:
+				arm_right.rotation.x = 0.0
 		velocity.x = move_toward(velocity.x, 0, WALK_SPEED * delta * 5.0)
 		velocity.z = move_toward(velocity.z, 0, WALK_SPEED * delta * 5.0)
 		move_and_slide()
@@ -61,17 +65,23 @@ func _physics_process(delta: float) -> void:
 		if leg_left and leg_right:
 			leg_left.rotation.x = sin(walk_cycle) * 0.6
 			leg_right.rotation.x = -sin(walk_cycle) * 0.6
+		if arm_left and arm_right:
+			arm_left.rotation.x = -sin(walk_cycle) * 0.5
+			arm_right.rotation.x = sin(walk_cycle) * 0.5
 		if body_mesh:
-			body_mesh.position.y = 0.5 + abs(sin(walk_cycle)) * 0.08
+			body_mesh.position.y = 0.48 + abs(sin(walk_cycle)) * 0.05
 	else:
 		velocity.x = move_toward(velocity.x, 0, speed)
 		velocity.z = move_toward(velocity.z, 0, speed)
-		# Volta pernas ao repouso
+		# Volta pernas e braços ao repouso
 		if leg_left and leg_right:
 			leg_left.rotation.x = lerp_angle(leg_left.rotation.x, 0.0, 10.0 * delta)
 			leg_right.rotation.x = lerp_angle(leg_right.rotation.x, 0.0, 10.0 * delta)
+		if arm_left and arm_right:
+			arm_left.rotation.x = lerp_angle(arm_left.rotation.x, 0.0, 10.0 * delta)
+			arm_right.rotation.x = lerp_angle(arm_right.rotation.x, 0.0, 10.0 * delta)
 		if body_mesh:
-			body_mesh.position.y = lerp(body_mesh.position.y, 0.5, 10.0 * delta)
+			body_mesh.position.y = lerp(body_mesh.position.y, 0.48, 10.0 * delta)
 
 	move_and_slide()
 
