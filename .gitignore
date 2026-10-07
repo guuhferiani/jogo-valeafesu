@@ -18,6 +18,9 @@ node_modules/
 dist/
 build/
 *.log
+*.exe
+.godot/
+vale_afesu_godot/.godot/
 
 # Editor & IDE Configs
 .vscode/

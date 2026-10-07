@@ -1,6 +1,9 @@
-# 🌾 Vale Afesu - Fazenda Web Jogável
+# 🌾 Vale Afesu - Fazenda Jogável (Web & Godot 4 3D)
 
-Um protótipo interativo e jogável inspirado na estética, interface e mecânicas acolhedoras de fazenda (estilo *Stardew Valley*), desenvolvido inteiramente em **HTML5 Canvas, CSS3 e JavaScript puro**, sem dependências externas pesadas.
+O projeto **Vale Afesu** é uma experiência acolhedora de fazenda com foco no curso **SENAI / AFESU** (*Inteligência Artificial Aplicada a Desenvolvimento de Jogos Digitais*). O repositório reúne duas versões integradas:
+
+1. 🌐 **Versão Web (HTML5 Canvas & JS)**: Protótipo jogável direto no navegador, responsivo e leve, pronto para deploy no Vercel.
+2. 🎮 **Versão Godot 4 Engine (3D Low-Poly & 2D)**: Implementação completa no motor Godot 4.7 com mundo 3D aconchegante, sombras dinâmicas, inteligência artificial autônoma para animais (FSM 3D) e ciclo solar.
 
 ---
 
@@ -94,31 +97,47 @@ Um protótipo interativo e jogável inspirado na estética, interface e mecânic
 
 ```text
 jogo-valeafesu/
-├── index.html        # Estrutura do jogo, HUD, telas e modais
-├── style.css         # Estilização visual (madeira, pergaminho, fontes pixeladas)
-├── vercel.json       # Configuração de segurança e headers HTTP para Vercel
-├── package.json      # Metadados e scripts
-├── .gitignore        # Regras de segurança para exclusão de arquivos sensíveis
-├── js/
-│   ├── audio.js      # Sintetizador procedural de efeitos sonoros e música
-│   ├── sprites.js    # Gerador modular de pixel art (personagem, animais, construções)
-│   ├── world.js      # Grid do mapa, canteiros, colheitas, celeiro e lago
-│   ├── player.js     # Movimento, colisões, inventário e ações das ferramentas
-│   └── main.js       # Game loop, câmera, criação de personagem e interior da casa
-└── README.md         # Documentação completa
+├── index.html            # Estrutura do jogo Web, HUD, telas e modais
+├── style.css             # Estilização visual (madeira, pergaminho, fontes pixeladas)
+├── vercel.json           # Configuração de segurança e headers HTTP para Vercel
+├── package.json          # Metadados e scripts
+├── .gitignore            # Regras de segurança e exclusão de caches (.godot, etc.)
+├── js/                   # Motor Web em Canvas & Vanilla JS
+│   ├── audio.js          # Sintetizador procedural de efeitos sonoros e música
+│   ├── sprites.js        # Gerador modular de pixel art (personagem, animais, construções)
+│   ├── world.js          # Grid do mapa, canteiros, colheitas, celeiro e lago
+│   ├── player.js         # Movimento, colisões, inventário e ações das ferramentas
+│   └── main.js           # Game loop, câmera, criação de personagem e interior da casa
+├── vale_afesu_godot/     # 🚀 Projeto Completo Godot 4.7 Engine (3D & 2D)
+│   ├── project.godot     # Configurações do motor, inputs e viewport 3D
+│   ├── scenes/
+│   │   ├── main_3d.tscn  # Cena 3D principal (Mundo, Canteiros 3D, Iluminação Solar)
+│   │   ├── player_3d.tscn# Fazendeiro 3D com câmera e passos procedurais
+│   │   ├── main.tscn     # Cena 2D clássica em Pixel Art
+│   │   ├── animals/      # Vaca Mimosa e Galinha Pipoca 3D e 2D
+│   │   └── ui/           # HUD CanvasLayer (Relógio, Barra de Energia, Hotbar)
+│   ├── scripts/          # GDScript modular com IA (FSM 3D) e gerenciadores
+│   └── assets/           # Texturas e Spritesheets gerados em Pixel Art
+└── README.md             # Documentação completa
 ```
 
 ## 🚀 Como Executar Localmente
 
-Você pode abrir o arquivo `index.html` em qualquer navegador moderno ou rodar o servidor embutido:
+### 1. Versão Web (HTML5 Canvas)
+Abra o arquivo `index.html` em qualquer navegador ou rode:
 ```bash
 python -m http.server 8080
 ```
-E acessar no navegador: `http://localhost:8080`.
+E acesse `http://localhost:8080`.
+
+### 2. Versão Godot 4 (3D Low-Poly & 2D)
+1. Abra o **Godot 4.7** (`Godot_v4.7.2-stable_win64.exe`).
+2. Clique em **Importar** e selecione a pasta `vale_afesu_godot/project.godot`.
+3. Pressione **`F5`** (ou clique no botão **Play ▶️**) para iniciar o jogo em 3D com sombras e IA!
 
 ## 🌐 Deploy no Vercel
 
-O projeto está otimizado para deploy imediato no **Vercel**:
+A versão Web continua 100% pronta para deploy automático no **Vercel**:
 1. Conecte o repositório GitHub no [Vercel](https://vercel.com/new).
-2. O arquivo `vercel.json` aplica automaticamente os cabeçalhos de segurança HTTP (`X-Content-Type-Options`, `X-Frame-Options`, `X-XSS-Protection`, `Referrer-Policy`, `Permissions-Policy`).
+2. O arquivo `vercel.json` aplica automaticamente os cabeçalhos de segurança HTTP.
 3. Deploy em segundos com HTTPS automático e CDN global.

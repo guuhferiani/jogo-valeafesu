@@ -1,0 +1,85 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/farm_world.gd" id="1_world"]
+[ext_resource type="Texture2D" path="res://assets/buildings/farmhouse.png" id="2_house_tex"]
+[ext_resource type="Texture2D" path="res://assets/buildings/shipping_bin.png" id="3_bin_tex"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="4_player_scene"]
+[ext_resource type="PackedScene" path="res://scenes/animals/chicken.tscn" id="5_chicken_scene"]
+[ext_resource type="PackedScene" path="res://scenes/animals/cow.tscn" id="6_cow_scene"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="7_hud_scene"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_house"]
+size = Vector2(80, 40)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bin"]
+radius = 16.0
+
+[node name="Main" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_world")
+
+[node name="Ground" type="ColorRect" parent="."]
+z_index = -10
+offset_left = -100.0
+offset_top = -100.0
+offset_right = 700.0
+offset_bottom = 500.0
+color = Color(0.360784, 0.682353, 0.219608, 1)
+
+[node name="Pond" type="ColorRect" parent="."]
+z_index = -9
+offset_left = 380.0
+offset_top = 40.0
+offset_right = 470.0
+offset_bottom = 90.0
+color = Color(0.203922, 0.596078, 0.858824, 1)
+
+[node name="Farmhouse" type="StaticBody2D" parent="."]
+position = Vector2(160, 48)
+
+[node name="Sprite2D" type="Sprite2D" parent="Farmhouse"]
+texture_filter = 1
+texture = ExtResource("2_house_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Farmhouse"]
+position = Vector2(0, 14)
+shape = SubResource("RectangleShape2D_house")
+
+[node name="ShippingBin" type="Node2D" parent="."]
+position = Vector2(80, 80)
+
+[node name="Sprite2D" type="Sprite2D" parent="ShippingBin"]
+texture_filter = 1
+texture = ExtResource("3_bin_tex")
+
+[node name="Area2D" type="Area2D" parent="ShippingBin"]
+collision_layer = 4
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShippingBin/Area2D"]
+shape = SubResource("CircleShape2D_bin")
+
+[node name="SoilContainer" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="CropsContainer" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="FloatingTexts" type="Node2D" parent="."]
+z_index = 50
+
+[node name="Animals" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Chicken" parent="Animals" instance=ExtResource("5_chicken_scene")]
+position = Vector2(280, 140)
+
+[node name="Cow" parent="Animals" instance=ExtResource("6_cow_scene")]
+position = Vector2(340, 160)
+
+[node name="Player" parent="." instance=ExtResource("4_player_scene")]
+position = Vector2(160, 110)
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+
+[node name="HUD" parent="." instance=ExtResource("7_hud_scene")]

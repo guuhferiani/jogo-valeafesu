@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/ai/chicken_ai.gd" id="1_chicken"]
+[ext_resource type="Texture2D" path="res://assets/animals/chicken.png" id="2_tex"]
+[ext_resource type="Texture2D" path="res://assets/ui/items.png" id="3_ui_tex"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 5.0
+
+[node name="Chicken" type="CharacterBody2D"]
+y_sort_enabled = true
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("1_chicken")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+hframes = 4
+vframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 2)
+shape = SubResource("CircleShape2D_1")
+
+[node name="HeartSprite" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(0, -14)
+texture = ExtResource("3_ui_tex")
+region_enabled = true
+region_rect = Rect2(96, 0, 16, 16)

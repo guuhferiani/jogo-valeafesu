@@ -1,0 +1,101 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/ai/cow_3d.gd" id="1_cow"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(1.0, 0.9, 1.4)
+
+[sub_resource type="StandardMaterial3D" id="Mat_CowWhite"]
+albedo_color = Color(0.96, 0.96, 0.98, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cow_body"]
+material = SubResource("Mat_CowWhite")
+size = Vector3(0.9, 0.65, 1.2)
+
+[sub_resource type="StandardMaterial3D" id="Mat_Black"]
+albedo_color = Color(0.18, 0.21, 0.25, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_patch"]
+material = SubResource("Mat_Black")
+size = Vector3(0.42, 0.42, 0.45)
+
+[sub_resource type="StandardMaterial3D" id="Mat_Pink"]
+albedo_color = Color(1.0, 0.72, 0.72, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_snout"]
+material = SubResource("Mat_Pink")
+size = Vector3(0.42, 0.24, 0.22)
+
+[sub_resource type="BoxMesh" id="BoxMesh_leg"]
+material = SubResource("Mat_CowWhite")
+size = Vector3(0.18, 0.38, 0.18)
+
+[sub_resource type="StandardMaterial3D" id="Mat_Heart"]
+albedo_color = Color(0.9, 0.2, 0.4, 1)
+emission_enabled = true
+emission = Color(0.9, 0.2, 0.4, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_heart"]
+material = SubResource("Mat_Heart")
+size = Vector3(0.25, 0.25, 0.25)
+
+[node name="Cow" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("1_cow")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+shape = SubResource("BoxShape3D_1")
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="Body" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+mesh = SubResource("BoxMesh_cow_body")
+
+[node name="Patch1" type="MeshInstance3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.65, 0.15)
+mesh = SubResource("BoxMesh_patch")
+
+[node name="Head" type="Node3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, -0.65)
+
+[node name="HeadMesh" type="MeshInstance3D" parent="Visuals/Head"]
+mesh = SubResource("BoxMesh_patch")
+
+[node name="Snout" type="MeshInstance3D" parent="Visuals/Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12, -0.22)
+mesh = SubResource("BoxMesh_snout")
+
+[node name="LegFL" type="Node3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.2, -0.4)
+
+[node name="Mesh" type="MeshInstance3D" parent="Visuals/LegFL"]
+mesh = SubResource("BoxMesh_leg")
+
+[node name="LegFR" type="Node3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0.2, -0.4)
+
+[node name="Mesh" type="MeshInstance3D" parent="Visuals/LegFR"]
+mesh = SubResource("BoxMesh_leg")
+
+[node name="LegBL" type="Node3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, 0.2, 0.4)
+
+[node name="Mesh" type="MeshInstance3D" parent="Visuals/LegBL"]
+mesh = SubResource("BoxMesh_leg")
+
+[node name="LegBR" type="Node3D" parent="Visuals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 0.2, 0.4)
+
+[node name="Mesh" type="MeshInstance3D" parent="Visuals/LegBR"]
+mesh = SubResource("BoxMesh_leg")
+
+[node name="HeartIndicator" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+visible = false
+
+[node name="Mesh" type="MeshInstance3D" parent="HeartIndicator"]
+mesh = SubResource("BoxMesh_heart")

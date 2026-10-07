@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
+[ext_resource type="Texture2D" path="res://assets/characters/farmer.png" id="2_farmer_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(10, 6)
+
+[node name="Player" type="CharacterBody2D"]
+y_sort_enabled = true
+collision_mask = 3
+script = ExtResource("1_player")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_farmer_tex")
+hframes = 4
+vframes = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_1")
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+target_position = Vector2(0, 20)
+collision_mask = 3
+
+[node name="WalkAnimTimer" type="Timer" parent="."]
+wait_time = 0.18
+autostart = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2.2, 2.2)
+position_smoothing_enabled = true
+
+[connection signal="timeout" from="WalkAnimTimer" to="." method="_on_walk_anim_timer_timeout"]

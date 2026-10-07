@@ -1,0 +1,95 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_hud"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="TopBar" type="HBoxContainer" parent="."]
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 470.0
+offset_bottom = 36.0
+theme_override_constants/separation = 12
+
+[node name="ClockPanel" type="PanelContainer" parent="TopBar"]
+layout_mode = 2
+
+[node name="ClockLabel" type="Label" parent="TopBar/ClockPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "🌱 Primavera • Dia 1 • 06:00"
+
+[node name="GoldPanel" type="PanelContainer" parent="TopBar"]
+layout_mode = 2
+
+[node name="GoldLabel" type="Label" parent="TopBar/GoldPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "🪙 500 G"
+
+[node name="SleepButton" type="Button" parent="TopBar"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "🛏️ Dormir (Avançar Dia)"
+
+[node name="EnergyPanel" type="VBoxContainer" parent="."]
+offset_left = 10.0
+offset_top = 40.0
+offset_right = 110.0
+offset_bottom = 66.0
+theme_override_constants/separation = 2
+
+[node name="EnergyLabel" type="Label" parent="EnergyPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "⚡ 100/100"
+
+[node name="ProgressBar" type="ProgressBar" parent="EnergyPanel"]
+custom_minimum_size = Vector2(100, 10)
+layout_mode = 2
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="HotbarContainer" type="VBoxContainer" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -225.0
+offset_top = -48.0
+offset_right = 225.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 2
+
+[node name="ActiveToolLabel" type="Label" parent="HotbarContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Ferramenta Ativa [1]: Enxada"
+horizontal_alignment = 1
+
+[node name="Slots" type="HBoxContainer" parent="HotbarContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="NotificationPanel" type="PanelContainer" parent="."]
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -175.0
+offset_top = 42.0
+offset_right = 175.0
+offset_bottom = 68.0
+grow_horizontal = 2
+
+[node name="NotificationLabel" type="Label" parent="NotificationPanel"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Notificação"
+horizontal_alignment = 1

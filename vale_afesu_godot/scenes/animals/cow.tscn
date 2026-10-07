@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/ai/cow_ai.gd" id="1_cow"]
+[ext_resource type="Texture2D" path="res://assets/animals/cow.png" id="2_cow_tex"]
+[ext_resource type="Texture2D" path="res://assets/ui/items.png" id="3_ui_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(22, 12)
+
+[node name="Cow" type="CharacterBody2D"]
+y_sort_enabled = true
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("1_cow")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_cow_tex")
+hframes = 3
+vframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_1")
+
+[node name="HeartSprite" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(0, -18)
+texture = ExtResource("3_ui_tex")
+region_enabled = true
+region_rect = Rect2(96, 0, 16, 16)
